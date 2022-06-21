@@ -1,0 +1,95 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "2022-06-21T20:30:44Z",
+    "title" : "assignment2api"
+  },
+  "host" : "t51smdxkvh.execute-api.us-east-1.amazonaws.com",
+  "basePath" : "/stage2",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "operationId" : "getPost",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "answers",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "q",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "operationId" : "enterPost",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "question",
+          "in" : "header",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "schema" : {
+              "$ref" : "#/definitions/Empty"
+            },
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Methods" : {
+                "type" : "string"
+              },
+              "Access-Control-Allow-Headers" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Empty" : {
+      "type" : "object",
+      "title" : "Empty Schema"
+    }
+  }
+}
