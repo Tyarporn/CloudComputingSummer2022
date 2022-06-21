@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+  <script type="text/javascript" src="lib/url-template/url-template.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+  <script type="text/javascript" src="apigClient.js"></script>
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+  <link rel="stylesheet" href="https://use.typekit.net/pux6lic.css">
+  <title>Homework Assignment 2</title>
+</head>
+
+<body>
+  <div class="opening">
+    <div class="container">
+      <div class="text">
+      </div>
+    </div><br>
+    <button id ="enterbtn">Enter Posts</button>
+      <button id = "showbtn">Show Posts</button>
+  </div>
+
+  <script>
+  var apigClient = apigClientFactory.newClient({
+    apiKey: 'jW0CsfblTC6JJVnFhETfCZAbwhMOEH95i9hTItZd' //connect to api
+  });
+
+  function enterPost(){
+    apigClient.rootPost(); //does nothing
+  }
+  function showPost(){
+     const x = apigClient.rootGet();
+     x.then(function(value){
+         console.log(value.data);
+         document.getElementById("GETresponse").innerHTML = value.data.body; //get promise body data
+       })
+
+     console.log(x);
+    // document.getElementById("GETresponse").innerHTML = "response";
+  }
+
+  var btn1 = document.getElementById("enterbtn");
+  var btn2 = document.getElementById("showbtn");
+  btn1.addEventListener("click", enterPost);
+  btn2.addEventListener("click", showPost);
+  </script>
+
+  <p id = "GETresponse">hi </p>
+
+</body>
+
+</html>
