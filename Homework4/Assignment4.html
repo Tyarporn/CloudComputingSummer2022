@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+  <script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+  <script type="text/javascript" src="lib/url-template/url-template.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+  <script type="text/javascript" src="apigClient.js"></script>
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+  <link rel="stylesheet" href="https://use.typekit.net/pux6lic.css">
+  <title>Homework Assignment 3</title>
+</head>
+
+<body>
+  <div class="opening">
+    <div class="container">
+      <div class="text">
+      </div>
+    </div><br>
+    <input type="text" placeholder="Enter a Post!" id="input bar">
+    <button id="enterbtn">Enter Posts</button>
+    <button id="showbtn">Show Posts</button>
+
+  </div>
+  <span style="white-space: pre-wrap">@Model.CommentText</span>
+
+  <script>
+    var apigClient = apigClientFactory.newClient({
+      apiKey: '4ZTiu4BebR3JldwJbZxgS3mWjnydDIIF75JoIeJx' //connect to api
+    });
+
+    function enterPost() {
+      var text = document.getElementById("input bar").value;
+      // var date = Date.now();
+
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+      var hr = today.getHours()
+      var min = today.getMinutes()
+      var sec = today.getSeconds()
+      var ms = today.getMilliseconds()
+
+      today = yyyy + '-' + mm + '-' + dd + 'T'+ hr + ':' + min + ':' + sec + "." + ms;
+
+      document.getElementById("input bar").value = "";
+      console.log(text);
+      console.log(today);
+      request = {"text": text, "date": today}
+      const x = apigClient.questionsPost(null,request); //does nothing
+      console.log(x)
+
+      x.then(function(value) {
+        console.log(value.data);
+        document.getElementById("responses").innerHTML = value.data.TEXT + " "+ value.data.DATE + " has been posted!";
+      })
+
+    }
+
+    function getPost() {
+      var text = document.getElementById("input bar").value;
+      var params = {
+          "q": text
+      }
+
+      console.log(params);
+      const x = apigClient.answersGet(params);
+      x.then(function(value) {
+        console.log(value.data);
+        // for (let i = 0; i < value.data.posts.length; i++) {
+        //     var tag =document.createElement("p");
+        //     var text = document.createTextNode(value.data.posts[i]);
+        //     tag.appendChild(text);
+        //     var element = document.getElementById("posts");
+        //     element.appendChild(tag);
+        // }
+        // document.getElementById("responses").innerHTML = value.data.posts[0]; //get promise body data
+        // document.getElementById("responses1").innerHTML = value.data.posts[1]; //get promise body data
+        // document.getElementById("responses2").innerHTML = value.data.posts[2]; //get promise body data
+        document.getElementById("responses").innerHTML = value.data.message; //get promise body data
+
+            // var tag =document.createElement("p");
+            // var text = document.createTextNode(value.data.message);
+            // tag.appendChild(text);
+            // var element = document.getElementById("posts");
+            // element.appendChild(tag);
+
+        console.log(value.data.event);
+        document.getElementById("input bar").value = "";
+      })
+
+      console.log(x);
+      // document.getElementById("GETresponse").innerHTML = "response";
+    }
+
+    var btn1 = document.getElementById("enterbtn");
+    var btn2 = document.getElementById("showbtn");
+    btn1.addEventListener("click", enterPost);
+    btn2.addEventListener("click", getPost);
+  </script>
+  <div id="posts">
+  <p style="white-space: pre-line" id="responses"> -- </p>
+  <br>
+  <p id="responses1"> -- </p>
+  <br>
+  <p id="responses2"> -- </p>
+
+</body>
+
+</html>
