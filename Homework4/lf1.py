@@ -3,6 +3,7 @@ import boto3
 import urllib3
 from boto3.dynamodb.conditions import Key
 client = boto3.client('sns')
+bot = boto3.client('lexv2-runtime')
 snsArn = 'arn:aws:sns:us-east-1:004807650303:postsearcher'
 
 
@@ -16,15 +17,30 @@ def lambda_handler(event, context):
     content_string = ""
     message = ""
 
-
+    query = event['params']['querystring']['q']
     http = urllib3.PoolManager()
+    response = bot.recognize_text(
+        botId='FF1EJQCSJW',
+        botAliasId='TSTALIASID',
+        localeId='en_US',
+        sessionId="test_session",
+        text=query
+        )
+
+    print(response['sessionState']['intent']['slots']['tag']['values'])
+    values = response['sessionState']['intent']['slots']['tag']['values']
+    tags = []
+    for v in values:
+        val = v['value']['interpretedValue']
+        print(val)
+        tags.append(val)
 
     index = "posts"
-    try:
-        tags = [event['params']['querystring']['q']] # change for assignment 3
-    except:
-        tag_raw = event['currentIntent']['slots']['tags'] # assignment 4
-        tags = tag_raw.split(" and ")
+    # try:
+    #     tags = [event['params']['querystring']['q']] # change for assignment 3
+    # except:
+    #     tag_raw = event['currentIntent']['slots']['tags'] # assignment 4
+    #     tags = tag_raw.split(" and ")
 
     # print(tags)
     # print(event)
@@ -76,6 +92,7 @@ def lambda_handler(event, context):
         for p in posts:
             message += (p + "\n\n")
 
+
     response = client.publish(
     TopicArn = snsArn,
     Message = message ,
@@ -84,15 +101,8 @@ def lambda_handler(event, context):
 
 
     return {
-        "dialogAction": {
-         "type": "Close",
-        "fulfillmentState": "Fulfilled",
-        "message": {
-            "contentType": "PlainText",
-            "content": "Thanks, your post request for{} has been processed!".format(content_string)
-
-    }
+        'statusCode': 200,
+        'posts': posts,
+        'message': message,
+        'body': json.dumps('Hello from Lambda!10')
         }
-
-
-    }
